@@ -3,6 +3,10 @@ defmodule G404.TranslatorCache.Supervisor do
   This supervisor holds all active translations for cache process.
   """
 
+  @doc """
+  Start yandex translation process. To be called by TranslatorCache.
+  """
+  @spec translate(String.t()) :: Task.t()
   def translate(phrase) do
     Task.Supervisor.async(__MODULE__, fn -> yandex_translate(phrase) end)
   end

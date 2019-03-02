@@ -13,7 +13,7 @@ defmodule G404.TranslatorCache do
   Fetch the result from cache, or, if this `phrase` was never translated before,
   execute the calculation then store and return it's result.
   """
-  @spec get_or_fill(String.t()) :: String.t()
+  @spec get_or_fill(String.t()) :: {:ok, String.t()} | {:error, any()}
   def get_or_fill(phrase) do
     GenServer.call(__MODULE__, {:get_or_fill, phrase})
   end

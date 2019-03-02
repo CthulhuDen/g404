@@ -32,6 +32,7 @@ defmodule G404.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
       {:phoenix, "~> 1.4.1"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},
