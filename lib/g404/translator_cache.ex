@@ -6,33 +6,33 @@ defmodule G404.TranslatorCache do
   use GenServer
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, :start, [{:name, __MODULE__} | opts])
+    GenServer.start_link(__MODULE__, :start, opts)
   end
 
   @doc """
   Fetch the result from cache, or, if this `phrase` was never translated before,
   execute the calculation then store and return it's result.
   """
-  @spec get_or_fill(String.t()) :: {:ok, String.t()} | {:error, any()}
-  def get_or_fill(phrase) do
-    GenServer.call(__MODULE__, {:get_or_fill, phrase})
+  @spec get_or_fill(pid(), String.t()) :: {:ok, String.t()} | {:error, any()}
+  def get_or_fill(pid, phrase) do
+    GenServer.call(pid, {:get_or_fill, phrase})
   end
 
   @doc """
   If `phrase` is already translated, or already in translation, it will wait
   for the translation and return it. Otherwise returns :error.
   """
-  @spec expect(String.t()) :: {:ok, String.t()} | :error
-  def expect(phrase) do
-    GenServer.call(__MODULE__, {:expect, phrase})
+  @spec expect(pid(), String.t()) :: {:ok, String.t()} | :error
+  def expect(pid, phrase) do
+    GenServer.call(pid, {:expect, phrase})
   end
 
   @doc """
   Stores `translation` for given `phrase`.
   """
-  @spec put(String.t(), String.t()) :: :ok
-  def put(phrase, translation) do
-    GenServer.call(__MODULE__, {:put, phrase, translation})
+  @spec put(pid(), String.t(), String.t()) :: :ok
+  def put(pid, phrase, translation) do
+    GenServer.call(pid, {:put, phrase, translation})
   end
 
   def init(:start) do
@@ -74,14 +74,29 @@ defmodule G404.TranslatorCache do
     end
   end
 
-  def handle_info({ref, {:ok, translation}}, {translations, tasks}) when is_reference(ref) do
+  def handle_info({ref, result}, {translations, tasks}) when is_reference(ref) do
     # We don't care about the DOWN message now, so let's demonitor and flush it
     Process.demonitor(ref, [:flush])
 
     phrase = Map.fetch!(tasks, ref)
     tasks = Map.delete(tasks, ref)
 
-    translations = put_translation(translations, phrase, translation)
+    translations =
+      case result do
+        {:ok, translation} ->
+          put_translation(translations, phrase, translation)
+
+        {:error, reason} ->
+          case Map.fetch(translations, phrase) do
+            {:ok, {:progress, pids}} ->
+              Enum.each(pids, &GenServer.reply(&1, {:error, reason}))
+              Map.delete(translations, phrase)
+
+            _ ->
+              translations
+          end
+      end
+
     {:noreply, {translations, tasks}}
   end
 

@@ -10,7 +10,7 @@ defmodule G404.Application do
     children = [
       G404Web.Endpoint,
       {Task.Supervisor, name: G404Web.TranslationTasks},
-      G404.TranslatorCache,
+      {G404.TranslatorCache, name: G404.TranslatorCache},
       {Task.Supervisor, name: G404.TranslatorCache.Supervisor}
     ]
 
