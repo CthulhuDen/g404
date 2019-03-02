@@ -8,7 +8,7 @@ defmodule G404Web.TranslatorChannel do
 
   def join("translator", _message, socket), do: {:ok, socket}
 
-  def handle_in("message", msg, socket) when is_binary(msg) do
+  def handle_in(_event, %{"message" => msg}, socket) when is_binary(msg) do
     if String.length(msg) > 200 do
       {:reply, {:error, %{"reason" => "too_long"}}, socket}
     else

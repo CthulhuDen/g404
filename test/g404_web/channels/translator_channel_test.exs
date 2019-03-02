@@ -19,20 +19,21 @@ defmodule G404Web.TranslatorChannelTest do
 
   test "refutes invalid messages" do
     socket = join!()
-    ref = push(socket, "whatever", "whatever")
+    ref = push(socket, "message", %{"whatever" => "whatever"})
     assert_reply ref, :error, %{"reason" => "invalid_message"}, 1000
   end
 
   test "refutes long strings" do
     socket = join!()
-    ref = push(socket, "message", List.to_string(List.duplicate(?a, 300)))
+    ref = push(socket, "message", %{"message" => List.to_string(List.duplicate(?a, 300))})
     assert_reply ref, :error, %{"reason" => "too_long"}, 1000
   end
 
   test "it works" do
     socket = join!()
-    push(socket, "message", "привет")
-    push(socket, "message", "гиппопотам")
+    ref = push(socket, "message", %{"message" => "привет"})
+    push(socket, "message", %{"message" => "гиппопотам"})
+    refute_reply ref, :error, _, 200
     assert_broadcast "translation", %{"eng_message" => "hi"}, 1000
     assert_broadcast "translation", %{"eng_message" => "Hippo"}, 1000
   end
