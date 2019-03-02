@@ -9,10 +9,12 @@ defmodule G404.Application do
     # List all child processes to be supervised
     children = [
       G404Web.Endpoint,
-      {Task.Supervisor, name: G404Web.TranslationTasks}
+      {Task.Supervisor, name: G404Web.TranslationTasks},
+      G404.TranslatorCache,
+      {Task.Supervisor, name: G404.TranslatorCache.Supervisor}
     ]
 
-    opts = [strategy: :rest_for_one, name: G404.Supervisor]
+    opts = [strategy: :one_for_all, name: G404.Supervisor]
     Supervisor.start_link(children, opts)
   end
 

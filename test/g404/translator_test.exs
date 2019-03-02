@@ -6,10 +6,9 @@ defmodule G404.TranslatorTest do
     assert {:ok, "hi"} = Translator.translate("привет")
   end
 
-  @tag :pending
   test "translation uses cache" do
     Translator.translate("привет")
-    assert {:ok, "hi"} = G404.TranslatorCache.fetch("привет")
+    assert {:ok, "hi"} = G404.TranslatorCache.expect("привет")
 
     G404.TranslatorCache.put("123", "321")
     assert {:ok, "321"} = Translator.translate("123")
