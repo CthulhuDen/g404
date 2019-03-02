@@ -1,8 +1,8 @@
-defmodule G404Web.UserSocket do
+defmodule G404Web.Socket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", G404Web.RoomChannel
+  channel "translator", G404Web.TranslatorChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

@@ -1,7 +1,7 @@
 defmodule G404Web.Endpoint do
   use Phoenix.Endpoint, otp_app: :g404
 
-  socket "/socket", G404Web.UserSocket,
+  socket "/socket", G404Web.Socket,
     websocket: true,
     longpoll: false
 
