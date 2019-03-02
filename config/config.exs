@@ -11,7 +11,7 @@ use Mix.Config
 config :g404, G404Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "oKRs2UhWbfd7cd6QZnSj6tBBDCambvMajKjKPbmrOPCqn4Y6jWJ70f8m8bpTa4C6",
-  render_errors: [view: G404Web.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: G404Web.ErrorView],
   pubsub: [name: G404.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

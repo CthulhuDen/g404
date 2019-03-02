@@ -41,10 +41,8 @@ config :g404, G404Web.Endpoint,
 config :g404, G404Web.Endpoint,
   live_reload: [
     patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
-      ~r{lib/g404_web/views/.*(ex)$},
-      ~r{lib/g404_web/templates/.*(eex)$}
+      ~r{lib/g404_web/views/.*(ex)$}
     ]
   ]
 
