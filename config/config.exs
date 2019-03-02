@@ -14,6 +14,9 @@ config :g404, G404Web.Endpoint,
   render_errors: [view: G404Web.ErrorView],
   pubsub: [name: G404.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :g404, G404.YandexTranslate,
+  token: "trnsl.1.1.20190302T094812Z.341d21fa6dd01e81.507a29200da3aac837b262d9b0dbcfe61de68588"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

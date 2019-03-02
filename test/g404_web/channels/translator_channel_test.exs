@@ -33,6 +33,6 @@ defmodule G404Web.TranslatorChannelTest do
   test "it works" do
     socket = join!()
     push(socket, "message", "привет")
-    assert_broadcast "eng_message", "hello", 1000
+    assert_broadcast "eng_message", "hi", 1000
   end
 end
