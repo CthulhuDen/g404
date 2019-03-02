@@ -27,7 +27,11 @@ defmodule G404.TranslatorTest do
     Translator.translate("привет", cache)
     assert {:ok, "hi"} = G404.TranslatorCache.expect(cache, "привет")
 
-    G404.TranslatorCache.put(cache, "123", "321")
-    assert {:ok, "321"} = Translator.translate("123", cache)
+    {:ok, another_cache} = G404.TranslatorCache.start_link([])
+    G404.TranslatorCache.put(another_cache, "привет", "hello")
+    assert {:ok, "hello"} = Translator.translate("привет", another_cache)
+
+    # Make sure original cache was not affected
+    assert {:ok, "hi"} = Translator.translate("привет", cache)
   end
 end
