@@ -13,7 +13,7 @@ defmodule G404.TranslatorCache do
   Fetch the result from cache, or, if this `phrase` was never translated before,
   execute the calculation then store and return it's result.
   """
-  @spec get_or_fill(pid(), String.t()) :: {:ok, String.t()} | {:error, any()}
+  @spec get_or_fill(GenServer.server(), String.t()) :: {:ok, String.t()} | {:error, any()}
   def get_or_fill(pid, phrase) do
     GenServer.call(pid, {:get_or_fill, phrase})
   end
@@ -22,7 +22,7 @@ defmodule G404.TranslatorCache do
   If `phrase` is already translated, or already in translation, it will wait
   for the translation and return it. Otherwise returns :error.
   """
-  @spec expect(pid(), String.t()) :: {:ok, String.t()} | :error
+  @spec expect(GenServer.server(), String.t()) :: {:ok, String.t()} | :error
   def expect(pid, phrase) do
     GenServer.call(pid, {:expect, phrase})
   end
@@ -30,7 +30,7 @@ defmodule G404.TranslatorCache do
   @doc """
   Stores `translation` for given `phrase`.
   """
-  @spec put(pid(), String.t(), String.t()) :: :ok
+  @spec put(GenServer.server(), String.t(), String.t()) :: :ok
   def put(pid, phrase, translation) do
     GenServer.call(pid, {:put, phrase, translation})
   end

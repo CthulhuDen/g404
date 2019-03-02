@@ -5,7 +5,7 @@ defmodule G404.Translator do
   """
 
   @doc "Translate the given phrase"
-  @spec translate(String.t(), pid()) :: {:error, any()} | {:ok, String.t()}
+  @spec translate(String.t(), GenServer.server()) :: {:error, any()} | {:ok, String.t()}
   def translate(phrase, cache \\ G404.TranslatorCache) do
     G404.TranslatorCache.get_or_fill(cache, phrase)
   end
