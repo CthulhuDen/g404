@@ -29,10 +29,11 @@ defmodule G404Web.TranslatorChannelTest do
     assert_reply ref, :error, %{"reason" => "too_long"}, 1000
   end
 
-  @tag :pending
   test "it works" do
     socket = join!()
     push(socket, "message", "привет")
-    assert_broadcast "eng_message", "hi", 1000
+    push(socket, "message", "гиппопотам")
+    assert_broadcast "translation", %{"eng_message" => "hi"}, 1000
+    assert_broadcast "translation", %{"eng_message" => "Hippo"}, 1000
   end
 end

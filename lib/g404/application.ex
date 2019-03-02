@@ -8,15 +8,11 @@ defmodule G404.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Start the endpoint when the application starts
-      G404Web.Endpoint
-      # Starts a worker by calling: G404.Worker.start_link(arg)
-      # {G404.Worker, arg},
+      G404Web.Endpoint,
+      {Task.Supervisor, name: G404Web.TranslationTasks}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: G404.Supervisor]
+    opts = [strategy: :rest_for_one, name: G404.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
